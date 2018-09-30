@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		img {
+			position: relative;
+			left: 6px;
+			top: 11px;
+		}
+	</style>
+</head>
+<body>
+	<div>
+		<form id="mform" action="/verify">
+			<label for="captcha">验证码</label>
+			<input type="text" id="captcha">
+			<img src="/img" alt="captcha">
+			<br><br>
+			<input type="submit" value="提交">
+		</form>
+	</div>
+
+	<script>
+		document.getElementById('mform').onsubmit = function(e){
+			e.preventDefault();
+
+			var captcha = document.querySelector('#captcha').value;
+
+			var xhr = new XMLHttpRequest();
+			xhr.open('GET', '/vcode?captcha=' + captcha, 	true);
+			xhr.send();
+			xhr.onreadystatechange = function(){
+				if(xhr.readyState == 4 && xhr.status == 200 || xhr.status == 304){
+					let result = xhr.responseText;
+					try {
+						result = JSON.parse(result);
+					}catch(err){
+						//parse
+					}
+					console.log(result);
+				}
+			}
+
+
+		}
+	</script>
+</body>
+</html>
